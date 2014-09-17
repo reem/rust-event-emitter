@@ -1,0 +1,24 @@
+[package]
+name = "event-emitter"
+version = "0.0.1"
+authors = ["Jonathan Reem <jonathan.reem@gmail.com>"]
+
+[lib]
+name = "event-emitter"
+path = "src/lib.rs"
+
+[dependencies.event]
+git = "https://github.com/reem/rust-event.git"
+
+[dependencies.typemap]
+git = "https://github.com/reem/rust-typemap.git"
+
+[dependencies.uuid]
+git = "https://github.com/rust-lang/uuid.git"
+
+[dependencies.unsafe-any]
+git = "https://github.com/reem/rust-unsafe-any.git"
+
+[dependencies.forever]
+git = "https://github.com/reem/rust-forever.git"
+
