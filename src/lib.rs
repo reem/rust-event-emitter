@@ -4,6 +4,10 @@
 #![deny(warnings)]
 
 //! An asynchronous EventEmitter based on rust-event
+//!
+//! You must initialize the rust-event EventQueue in your
+//! own code.
+//!
 
 extern crate uuid;
 extern crate event;
