@@ -106,11 +106,9 @@ impl Assoc<EventEmitterEvent> for EventEmitterEvent {}
 
 fn setup() {
     let emitters = Forever::new(RWLock::new(HashMap::new()));
-    let emitters_insert = emitters.clone();
-    let emitters_delete = emitters.clone();
 
     // Dispatch EventEmitter events.
-    event::on::<EventEmitterEvent, EventEmitterEvent>(box() (|&: box event: Box<EventEmitterEvent>| {
+    event::on::<EventEmitterEvent, EventEmitterEvent>(box() (move |&: box event: Box<EventEmitterEvent>| {
         emitters.read().find(&event.emitter_id).map(|emitter: &Box<EventEmitter>| {
             let read = emitter.handlers.read();
             match unsafe { read.data() }.find(&event.event_id) {
@@ -127,13 +125,13 @@ fn setup() {
     }) as event::Handler<EventEmitterEvent>);
 
     // Add new EventEmitters.
-    event::on::<EventEmitterCreated, EventEmitter>(box() (|&: emitter: Box<EventEmitter>| {
-        emitters_insert.write().insert(emitter.id, emitter);
+    event::on::<EventEmitterCreated, EventEmitter>(box() (move |&: emitter: Box<EventEmitter>| {
+        emitters.write().insert(emitter.id, emitter);
     }) as event::Handler<EventEmitter>);
 
     // Delete dropped EventEmitters.
-    event::on::<EventEmitterDropped, Uuid>(box() (|&: box id: Box<Uuid>| {
-        emitters_delete.write().remove(&id);
+    event::on::<EventEmitterDropped, Uuid>(box() (move |&: box id: Box<Uuid>| {
+        emitters.write().remove(&id);
     }) as Handler<Uuid>);
 }
 
