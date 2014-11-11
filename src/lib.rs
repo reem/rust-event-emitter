@@ -109,9 +109,9 @@ fn setup() {
 
     // Dispatch EventEmitter events.
     event::on::<EventEmitterEvent, EventEmitterEvent>(box() (move |&: box event: Box<EventEmitterEvent>| {
-        emitters.read().find(&event.emitter_id).map(|emitter: &Box<EventEmitter>| {
+        emitters.read().get(&event.emitter_id).map(|emitter: &Box<EventEmitter>| {
             let read = emitter.handlers.read();
-            match unsafe { read.data() }.find(&event.event_id) {
+            match unsafe { read.data() }.get(&event.event_id) {
                 Some(handler) => {
                     unsafe {
                         // The handler still thinks it receives a Box, so it will drop
